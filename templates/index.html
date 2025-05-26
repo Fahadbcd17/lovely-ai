@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Bot</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <button class="new-chat" onclick="document.forms['new-chat-form'].submit()">
+                <i class="fas fa-plus"></i> New Chat
+            </button>
+            <form id="new-chat-form" method="post" action="/">
+                <input type="hidden" name="new_chat" value="true">
+            </form>
+            
+            <div class="chat-list">
+                {% for chat_id, chat in chats.items() %}
+                <div class="chat-item {% if chat_id == current_chat_id %}active{% endif %}">
+                    <form method="post" action="/">
+                        <input type="hidden" name="switch_chat" value="{{ chat_id }}">
+                        <button type="submit" class="chat-link">
+                            <i class="fas fa-comment-dots"></i>
+                            <span>{{ chat.title }}</span>
+                            {% if chat.is_new %}<span class="new-indicator">New</span>{% endif %}
+                        </button>
+                    </form>
+                    <form method="post" action="/">
+                        <input type="hidden" name="delete_chat" value="{{ chat_id }}">
+                        <button type="submit" class="delete-btn">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </aside>
+
+        <main class="chat-area">
+            <div class="messages">
+                {% if not messages %}
+                <div class="welcome-message">
+                    <h1>Lovely AI</h1>
+                    <p>How can I help you today?</p>
+                </div>
+                {% else %}
+                    {% for msg in messages %}
+                    <div class="message {% if msg.role == 'user' %}user-message{% else %}bot-message{% endif %}">
+                        {{ msg.content | replace('\n', '<br>') | safe }}
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <form class="message-form" method="post" action="/">
+                <textarea name="user_message" placeholder="Type your message..." required></textarea>
+                <button type="submit"><i class="fas fa-paper-plane"></i></button>
+            </form>
+        </main>
+    </div>
+
+    <!-- Loading Animation -->
+    <div id="loading-indicator" class="loading-container" style="display: none;">
+        <div class="loading-animation animate__animated animate__fadeIn">
+            <div class="dot-flashing"></div>
+            <p>Thinking...</p>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.message-form').addEventListener('submit', function(e) {
+            if (document.querySelector('[name="user_message"]').value.trim()) {
+                // Show loading animation
+                document.getElementById('loading-indicator').style.display = 'flex';
+                
+                // Smooth scroll to bottom
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: document.body.scrollHeight,
+                        behavior: 'smooth'
+                    });
+                }, 100);
+            }
+        });
+        
+        // Hide loader when page reloads
+        window.addEventListener('load', function() {
+            document.getElementById('loading-indicator').style.display = 'none';
+        });
+    </script>
+</body>
+</html>

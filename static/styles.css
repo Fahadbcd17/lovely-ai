@@ -1,0 +1,251 @@
+:root {
+    --primary: #4f46e5;
+    --primary-dark: #4338ca;
+    --sidebar-bg: #1e1e2d;
+    --chat-bg: #f9fafb;
+    --message-bg: #ffffff;
+    --user-message: #4f46e5;
+    --text: #111827;
+    --text-light: #6b7280;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+}
+
+.sidebar {
+    width: 260px;
+    background: var(--sidebar-bg);
+    color: white;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.new-chat {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.chat-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.chat-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.chat-item.active {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.chat-link {
+    flex: 1;
+    background: none;
+    border: none;
+    color: white;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 0.25rem;
+}
+
+.new-indicator {
+    background: var(--primary);
+    color: white;
+    font-size: 0.7rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 0.5rem;
+    margin-left: 0.5rem;
+}
+
+.chat-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--chat-bg);
+}
+
+.messages {
+    flex: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+.welcome-message {
+    text-align: center;
+    margin-top: 3rem;
+    color: var(--text-light);
+}
+
+.message {
+    max-width: 80%;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    border-radius: 1rem;
+    line-height: 1.5;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.user-message {
+    background: var(--user-message);
+    color: white;
+    margin-left: auto;
+}
+
+.bot-message {
+    background: var(--message-bg);
+    color: var(--text);
+    margin-right: auto;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.message-form {
+    display: flex;
+    padding: 1rem;
+    gap: 0.5rem;
+}
+
+.message-form textarea {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+    resize: none;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+.message-form button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0 1.25rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Loading animation styles */
+.loading-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.loading-animation {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.dot-flashing {
+    position: relative;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #4f46e5;
+    color: #4f46e5;
+    animation: dotFlashing 1s infinite linear alternate;
+    animation-delay: .5s;
+    margin: 0 auto 1rem;
+}
+
+.dot-flashing::before, .dot-flashing::after {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #4f46e5;
+    color: #4f46e5;
+}
+
+.dot-flashing::before {
+    left: -15px;
+    animation: dotFlashing 1s infinite alternate;
+    animation-delay: 0s;
+}
+
+.dot-flashing::after {
+    left: 15px;
+    animation: dotFlashing 1s infinite alternate;
+    animation-delay: 1s;
+}
+
+@keyframes dotFlashing {
+    0% {
+        background-color: #4f46e5;
+    }
+    50%,
+    100% {
+        background-color: #e0e7ff;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        position: fixed;
+        z-index: 10;
+        bottom: 0;
+        height: auto;
+    }
+    
+    .chat-area {
+        margin-bottom: 80px;
+    }
+}
